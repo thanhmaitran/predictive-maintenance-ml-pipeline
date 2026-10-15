@@ -1,0 +1,7 @@
+# NOT the project's official pins (those are requirements.txt / requirements-docker.txt,
+# exercised by the Docker build and pytest run).
+# Newer versions used only in the development sandbox (Python 3.13.16) for the
+# extra stability check, which gives Random Forest F1 0.859 instead of 0.833.
+pandas==3.0.5
+numpy==2.5.3
+scikit-learn==1.9.1

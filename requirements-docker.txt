@@ -1,0 +1,15 @@
+# Dependencies installed ON TOP of the official apache/airflow base image
+# (see Dockerfile). Deliberately does NOT include apache-airflow itself —
+# the base image already pins a tested, compatible Airflow + Python
+# version, and reinstalling a different Airflow version here is the #1
+# cause of broken Airflow Docker images.
+
+pandas==2.2.2
+numpy==1.26.4
+scikit-learn==1.5.1
+joblib==1.4.2
+scipy==1.13.1
+matplotlib==3.9.0
+seaborn==0.13.2
+PyYAML==6.0.1
+pytest==8.2.2

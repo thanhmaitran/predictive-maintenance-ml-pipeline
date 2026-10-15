@@ -1,0 +1,117 @@
+# Full reproducible environment for the predictive-maintenance pipeline
+# (Phase 16 / Milestone 8). All services build from the single project
+# Dockerfile (apache/airflow base + our requirements-docker.txt + the
+# project code baked in) — see Dockerfile for details.
+#
+#   postgres          Airflow metadata database
+#   airflow-init       one-off: run migrations + create the admin user
+#   airflow-webserver  Airflow UI (http://localhost:8080, admin/admin)
+#   airflow-scheduler  executes DAG runs (predictive_maintenance_dag)
+#   pipeline           run `pytest` or any src/ module standalone, without Airflow
+#
+# Quick start:
+#   docker compose up airflow-init        # first time only: migrate DB + create user
+#   docker compose up -d postgres airflow-webserver airflow-scheduler
+#   open http://localhost:8080 (admin/admin), trigger predictive_maintenance_dag
+#
+#   docker compose run --rm pipeline pytest
+#   docker compose run --rm pipeline python -m src.ingestion.ingest
+
+x-airflow-common:
+  &airflow-common
+  build:
+    context: .
+    dockerfile: Dockerfile
+  environment:
+    &airflow-common-env
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+    AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "true"
+    AIRFLOW__WEBSERVER__EXPOSE_CONFIG: "true"
+    AIRFLOW__CORE__DAGBAG_IMPORT_TIMEOUT: "120"
+    PYTHONPATH: /opt/airflow
+  user: "${AIRFLOW_UID:-50000}:0"
+  volumes:
+    - ./dags:/opt/airflow/dags
+    - ./src:/opt/airflow/src
+    - ./config:/opt/airflow/config
+    - ./data:/opt/airflow/data
+    - ./models:/opt/airflow/models
+    - ./reports:/opt/airflow/reports
+    - airflow-logs:/opt/airflow/logs
+  depends_on:
+    postgres:
+      condition: service_healthy
+
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 5s
+      retries: 5
+    restart: always
+
+  airflow-init:
+    <<: *airflow-common
+    entrypoint: /bin/bash
+    command:
+      - -c
+      - |
+        airflow db migrate &&
+        (airflow users create \
+          --username admin --password admin \
+          --firstname Admin --lastname User \
+          --role Admin --email admin@example.com || true)
+
+  airflow-webserver:
+    <<: *airflow-common
+    command: webserver
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      airflow-init:
+        condition: service_completed_successfully
+    restart: always
+
+  airflow-scheduler:
+    <<: *airflow-common
+    command: scheduler
+    depends_on:
+      postgres:
+        condition: service_healthy
+      airflow-init:
+        condition: service_completed_successfully
+    restart: always
+
+  pipeline:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/opt/airflow/src
+      - ./tests:/opt/airflow/tests
+      - ./config:/opt/airflow/config
+      - ./data:/opt/airflow/data
+      - ./models:/opt/airflow/models
+      - ./reports:/opt/airflow/reports
+    working_dir: /opt/airflow
+    user: "${AIRFLOW_UID:-50000}:0"
+    # Bypass Airflow's own entrypoint script (which expects an Airflow
+    # subcommand and a live metadata-DB connection) since this service
+    # only needs to run the plain Python pipeline / test suite.
+    entrypoint: []
+    command: ["pytest"]
+
+volumes:
+  postgres-db-volume:
+  airflow-logs:

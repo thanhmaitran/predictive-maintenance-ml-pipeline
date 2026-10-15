@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.env
+.pytest_cache/
+
+# Airflow runtime (NOT the same as reports/logs/, which IS committed —
+# those are curated evidence logs, not raw Airflow task-instance logs)
+airflow.cfg
+airflow.db
+/logs/
+dags/__pycache__/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+
+# Regenerable intermediate/processed data — kept out of git so the repo
+# doesn't carry stale copies that silently drift from what the pipeline
+# actually produces. data/raw/ai4i2020.csv IS committed (small, and is
+# the one file needed to reproduce everything else from scratch).
+data/interim/*.csv
+data/validated/*.csv
+data/processed/*.csv
+
+# Trained model binaries — regenerable via `python -m src.models.train &&
+# python -m src.models.evaluate` (or the Docker/Airflow DAG) in seconds.
+# model_metadata.json is NOT excluded (small, human-readable, useful to
+# browse on GitHub without pulling a multi-MB binary).
+models/*.joblib
