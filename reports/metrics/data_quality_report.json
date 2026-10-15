@@ -1,0 +1,25 @@
+{
+  "rows": 10000,
+  "columns": 14,
+  "checks": {
+    "schema": "PASS",
+    "row_count": "PASS",
+    "duplicate_udi": "PASS",
+    "product_type": "PASS",
+    "temperature_positive": "PASS",
+    "rotational_speed_positive": "PASS",
+    "torque_non_negative": "PASS",
+    "tool_wear_non_negative": "PASS",
+    "target_values_valid": "PASS",
+    "missing_values": "PASS",
+    "leakage_guard": "PASS",
+    "failure_mode_consistency": "WARNING"
+  },
+  "errors": [],
+  "warnings": [
+    "27 row(s) have a failure-mode flag inconsistent with Machine failure. Known AI4I 2020 dataset quirk \u2014 treated as a warning."
+  ],
+  "failure_mode_mismatch_count": 27,
+  "leakage_detected": false,
+  "status": "PASS"
+}

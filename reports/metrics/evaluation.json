@@ -1,0 +1,118 @@
+{
+  "logistic_regression": {
+    "metrics": {
+      "model": "logistic_regression",
+      "accuracy": 0.8595,
+      "precision": 0.18018018018018017,
+      "recall": 0.8823529411764706,
+      "f1": 0.29925187032418954,
+      "roc_auc": 0.9384895262452807,
+      "pr_auc": 0.42979043460965594
+    },
+    "confusion_matrix": {
+      "tn": 1659,
+      "fp": 273,
+      "fn": 8,
+      "tp": 60
+    },
+    "threshold_sweep": [
+      {
+        "threshold": 0.3,
+        "precision": 0.10998307952622674,
+        "recall": 0.9558823529411765,
+        "f1": 0.19726858877086495
+      },
+      {
+        "threshold": 0.4,
+        "precision": 0.13537117903930132,
+        "recall": 0.9117647058823529,
+        "f1": 0.23574144486692014
+      },
+      {
+        "threshold": 0.5,
+        "precision": 0.18018018018018017,
+        "recall": 0.8823529411764706,
+        "f1": 0.29925187032418954
+      },
+      {
+        "threshold": 0.6,
+        "precision": 0.23076923076923078,
+        "recall": 0.8382352941176471,
+        "f1": 0.3619047619047619
+      },
+      {
+        "threshold": 0.7,
+        "precision": 0.28272251308900526,
+        "recall": 0.7941176470588235,
+        "f1": 0.416988416988417
+      }
+    ]
+  },
+  "random_forest": {
+    "metrics": {
+      "model": "random_forest",
+      "accuracy": 0.99,
+      "precision": 0.9615384615384616,
+      "recall": 0.7352941176470589,
+      "f1": 0.8333333333333334,
+      "roc_auc": 0.9791780842771892,
+      "pr_auc": 0.873650916143114
+    },
+    "confusion_matrix": {
+      "tn": 1930,
+      "fp": 2,
+      "fn": 18,
+      "tp": 50
+    },
+    "threshold_sweep": [
+      {
+        "threshold": 0.3,
+        "precision": 0.8888888888888888,
+        "recall": 0.8235294117647058,
+        "f1": 0.8549618320610687
+      },
+      {
+        "threshold": 0.4,
+        "precision": 0.9655172413793104,
+        "recall": 0.8235294117647058,
+        "f1": 0.8888888888888888
+      },
+      {
+        "threshold": 0.5,
+        "precision": 0.9622641509433962,
+        "recall": 0.75,
+        "f1": 0.8429752066115702
+      },
+      {
+        "threshold": 0.6,
+        "precision": 0.9583333333333334,
+        "recall": 0.6764705882352942,
+        "f1": 0.7931034482758621
+      },
+      {
+        "threshold": 0.7,
+        "precision": 0.9487179487179487,
+        "recall": 0.5441176470588235,
+        "f1": 0.6915887850467289
+      }
+    ],
+    "feature_importance": {
+      "estimated_power": 0.1537,
+      "rotational_speed": 0.153,
+      "torque": 0.1481,
+      "angular_speed": 0.1459,
+      "tool_wear": 0.1317,
+      "wear_torque_index": 0.1127,
+      "temperature_difference": 0.0737,
+      "air_temperature": 0.0442,
+      "process_temperature": 0.0258,
+      "type_M": 0.0045,
+      "type_L": 0.0045,
+      "type_H": 0.0021
+    }
+  },
+  "model_selection": {
+    "primary_metric": "f1",
+    "selected_model": "random_forest"
+  }
+}
