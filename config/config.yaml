@@ -1,0 +1,56 @@
+# Central configuration for the predictive-maintenance pipeline.
+# Keeping paths / seeds / column names here avoids hardcoding them
+# across ingestion, validation, feature engineering, and training.
+
+random_state: 42
+
+paths:
+  raw: "data/raw/ai4i2020.csv"
+  interim_raw_copy: "data/interim/raw_copy.csv"
+  validated: "data/validated/ai4i2020_validated.csv"
+  cleaned: "data/interim/cleaned_data.csv"
+  features: "data/processed/features.csv"
+  train: "data/processed/train.csv"
+  test: "data/processed/test.csv"
+  models_dir: "models"
+  reports_dir: "reports"
+
+split:
+  test_size: 0.2
+  stratify: true
+
+columns:
+  id_columns:
+    - "UDI"
+    - "Product ID"
+  categorical:
+    - "Type"
+  numeric:
+    - "Air temperature [K]"
+    - "Process temperature [K]"
+    - "Rotational speed [rpm]"
+    - "Torque [Nm]"
+    - "Tool wear [min]"
+  engineered:
+    - "temperature_difference"
+    - "angular_speed"
+    - "estimated_power"
+    - "wear_torque_index"
+  target: "Machine failure"
+  # Failure-mode / leakage columns: NEVER include these in the ML feature
+  # matrix. Kept here only so validation/leakage tests can reference them.
+  failure_mode_columns:
+    - "TWF"
+    - "HDF"
+    - "PWF"
+    - "OSF"
+    - "RNF"
+
+allowed_product_types:
+  - "L"
+  - "M"
+  - "H"
+
+evaluation:
+  thresholds: [0.3, 0.4, 0.5, 0.6, 0.7]
+  primary_metric: "f1"
