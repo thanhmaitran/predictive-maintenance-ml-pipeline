@@ -1,0 +1,46 @@
+{
+  "model": "random_forest",
+  "model_class": "RandomForestClassifier",
+  "training_date": "2026-10-15",
+  "dataset_version": "AI4I 2020 (ai4i2020.csv)",
+  "feature_columns": [
+    "type",
+    "air_temperature",
+    "process_temperature",
+    "rotational_speed",
+    "torque",
+    "tool_wear",
+    "temperature_difference",
+    "angular_speed",
+    "estimated_power",
+    "wear_torque_index"
+  ],
+  "categorical_features": [
+    "type"
+  ],
+  "numeric_features": [
+    "air_temperature",
+    "process_temperature",
+    "rotational_speed",
+    "torque",
+    "tool_wear",
+    "temperature_difference",
+    "angular_speed",
+    "estimated_power",
+    "wear_torque_index"
+  ],
+  "target": "machine_failure",
+  "random_state": 42,
+  "training_rows": 8000,
+  "test_rows": 2000,
+  "metrics": {
+    "model": "random_forest",
+    "accuracy": 0.99,
+    "precision": 0.9615384615384616,
+    "recall": 0.7352941176470589,
+    "f1": 0.8333333333333334,
+    "roc_auc": 0.9791780842771892,
+    "pr_auc": 0.873650916143114
+  },
+  "selection_criterion": "f1"
+}
