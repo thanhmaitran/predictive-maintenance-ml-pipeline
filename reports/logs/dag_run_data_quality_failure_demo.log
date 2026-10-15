@@ -1,0 +1,43 @@
+============================================================
+Simulating predictive_maintenance_dag
+============================================================
+
+--- Task: ingest_data ---
+Ingestion OK: data/raw/ai4i2020.csv
+  Rows received:    10000
+  Columns received: 14
+  Interim copy written to: data/interim/raw_copy.csv
+--- Task 'ingest_data' succeeded in 0.06s ---
+
+--- Task: validate_data ---
+{
+  "rows": 10000,
+  "columns": 14,
+  "checks": {
+    "schema": "PASS",
+    "row_count": "PASS",
+    "duplicate_udi": "PASS",
+    "product_type": "FAIL",
+    "temperature_positive": "PASS",
+    "rotational_speed_positive": "PASS",
+    "torque_non_negative": "FAIL",
+    "tool_wear_non_negative": "PASS",
+    "target_values_valid": "PASS",
+    "missing_values": "PASS",
+    "leakage_guard": "PASS",
+    "failure_mode_consistency": "WARNING"
+  },
+  "errors": [
+    "Found 1 row(s) with a Type outside {'M', 'L', 'H'}.",
+    "Found 1 row(s) with negative torque."
+  ],
+  "warnings": [
+    "27 row(s) have a failure-mode flag inconsistent with Machine failure. Known AI4I 2020 dataset quirk \u2014 treated as a warning."
+  ],
+  "failure_mode_mismatch_count": 27,
+  "leakage_detected": false,
+  "status": "FAIL"
+}
+
+[TASK FAILED] validate_data: Data Quality Gate FAILED — see reports/metrics/data_quality_report.json. Halting pipeline; train_model will not run.
+Downstream tasks will NOT run (matches Airflow's dependency behavior).

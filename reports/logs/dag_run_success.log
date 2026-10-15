@@ -1,0 +1,74 @@
+============================================================
+Simulating predictive_maintenance_dag
+============================================================
+
+--- Task: ingest_data ---
+Ingestion OK: data/raw/ai4i2020.csv
+  Rows received:    10000
+  Columns received: 14
+  Interim copy written to: data/interim/raw_copy.csv
+--- Task 'ingest_data' succeeded in 0.04s ---
+
+--- Task: validate_data ---
+{
+  "rows": 10000,
+  "columns": 14,
+  "checks": {
+    "schema": "PASS",
+    "row_count": "PASS",
+    "duplicate_udi": "PASS",
+    "product_type": "PASS",
+    "temperature_positive": "PASS",
+    "rotational_speed_positive": "PASS",
+    "torque_non_negative": "PASS",
+    "tool_wear_non_negative": "PASS",
+    "target_values_valid": "PASS",
+    "missing_values": "PASS",
+    "leakage_guard": "PASS",
+    "failure_mode_consistency": "WARNING"
+  },
+  "errors": [],
+  "warnings": [
+    "27 row(s) have a failure-mode flag inconsistent with Machine failure. Known AI4I 2020 dataset quirk \u2014 treated as a warning."
+  ],
+  "failure_mode_mismatch_count": 27,
+  "leakage_detected": false,
+  "status": "PASS"
+}
+--- Task 'validate_data' succeeded in 0.04s ---
+
+--- Task: clean_data ---
+--- Task 'clean_data' succeeded in 0.05s ---
+
+--- Task: feature_engineering ---
+--- Task 'feature_engineering' succeeded in 0.09s ---
+
+--- Task: split_data ---
+Train: 8000 rows (failure rate 3.39%)
+Test:  2000 rows (failure rate 3.40%)
+--- Task 'split_data' succeeded in 0.14s ---
+
+--- Task: train_model ---
+logistic_regression trained on 8000 rows and saved to models/logistic_regression.joblib
+random_forest trained on 8000 rows and saved to models/random_forest.joblib
+--- Task 'train_model' succeeded in 1.42s ---
+
+--- Task: evaluate_model ---
+                     accuracy  precision  recall      f1  roc_auc  pr_auc
+model                                                                    
+logistic_regression    0.8595     0.1802  0.8824  0.2993   0.9385  0.4298
+random_forest          0.9910     0.9167  0.8088  0.8594   0.9767  0.8726
+
+Selected model (by f1): random_forest
+Standardized artifact saved: models/model_pipeline.joblib
+Metadata saved: models/model_metadata.json
+--- Task 'evaluate_model' succeeded in 1.44s ---
+
+--- Task: save_model ---
+Model artifact ready: models/model_pipeline.joblib
+Model metadata ready: models/model_metadata.json
+--- Task 'save_model' succeeded in 0.00s ---
+
+============================================================
+DAG run SUCCESS — all 8 tasks completed.
+============================================================
