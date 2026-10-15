@@ -385,17 +385,5 @@ Rather than one final `git add . && git commit -m "finished project"`, commit al
 12. add architecture diagrams + finalize README
 ```
 
-## GitHub Audit Checklist
-Before pushing:
-- [ ] Fill in your real name in `LICENSE` (currently `[YOUR NAME HERE]`).
-- [ ] Confirm `.gitignore` excludes `data/interim/`, `data/validated/`, `data/processed/` CSVs and `models/*.joblib` — these are regenerable and were deliberately kept out of git to avoid a bloated, driftable repo (see `.gitignore` comments). `data/raw/ai4i2020.csv` and `models/model_metadata.json` ARE tracked.
-- [x] `pytest` run for real (Docker image, 32 passed).
-- [x] `docker compose` stack run for real on Docker Desktop.
-- [x] `predictive_maintenance_dag` triggered from the real Airflow UI (Figure 7).
-- [ ] After the DagBag import fix: `docker compose build`, re-trigger the DAG once, confirm the 30 s timeout warning is gone.
-- [ ] Optional: re-take the Docker/pytest screenshots from a folder with a clean path (current ones show the local folder name).
-- [ ] Double check no local absolute paths (e.g. `/home/claude/...`) leaked into any committed file — this repo was developed under `/home/claude/project-06-predictive-maintenance`; all code uses relative paths, but worth a final `grep -r "/home/" .` before pushing.
-- [ ] Confirm `__pycache__/`, `.pytest_cache/`, and `.ipynb_checkpoints/` are not accidentally staged.
-
 ## References
 - S. Matzka (2020), see Dataset Attribution above.
